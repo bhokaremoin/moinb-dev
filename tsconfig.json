@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@content/*": ["./content/*"]
+      "@content/*": ["./content/*"],
+      "#site/content": ["./.velite"]
     }
   },
   "include": [

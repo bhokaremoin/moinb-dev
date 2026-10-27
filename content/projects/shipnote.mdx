@@ -1,0 +1,44 @@
+---
+# PLACEHOLDER: sample case study. Replace with a real project.
+title: Shipnote
+tagline: changelogs people actually read
+summary: A CLI + web app that turns git commits into readable changelogs.
+date: 2025-04-01
+type: Open source
+stack: [Node.js, OpenAI API, Astro]
+role: Solo maintainer
+timeline: 4 weeks, 2025
+users: 300+ GitHub stars
+repoUrl: https://github.com/bhokaremoin
+featured: true
+architecture: [git log, Node.js CLI, OpenAI API, Astro site]
+metrics:
+  - { value: 300+, label: GitHub stars }
+  - { value: "12", label: contributors }
+  - { value: 5s, label: per release note }
+---
+
+## The problem
+
+Release notes at work were either a raw commit dump or skipped entirely, so nobody outside the team knew what had shipped.
+
+## Constraints
+
+- Must run locally and in CI with one command.
+- Commits stay on the machine unless the user opts in to the AI summary.
+
+## Architecture
+
+<ArchitectureDiagram />
+
+## Key decisions
+
+**Group by conventional commit type first.** Most of the structure comes for free from commit prefixes; the model only rewrites each group into plain English.
+
+## Results
+
+<MetricCards />
+
+## What I'd do differently
+
+Ship the plain, non-AI formatter first. Most users wanted grouping more than prose.
