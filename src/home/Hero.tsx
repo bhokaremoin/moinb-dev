@@ -1,5 +1,5 @@
 import { site } from "@content/site";
-import { sectionUrl } from "@/routing/site-urls";
+import { sectionHref } from "@/routing/site-urls";
 import { ButtonLink } from "@/ui/ButtonLink";
 
 export function Hero() {
@@ -21,7 +21,7 @@ export function Hero() {
         {site.intro}
       </p>
       <div className="mt-7 flex flex-wrap gap-3">
-        <ButtonLink href={sectionUrl("projects")} variant="primary">
+        <ButtonLink href={sectionHref("projects", "home")} variant="primary">
           See my work →
         </ButtonLink>
         <ButtonLink href={site.resumePath}>Résumé (PDF)</ButtonLink>

@@ -93,7 +93,8 @@ export function sectionHref(
   path = "/",
   config: RoutingConfig = routingConfig,
 ): string {
-  if (target === current) {
+  // In path mode every section shares one host, so a path keeps the visitor on it.
+  if (target === current || config.mode === "path") {
     return sectionPath(target, path, config);
   }
   return sectionUrl(target, path, config);

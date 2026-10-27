@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { sectionUrl } from "@/routing/site-urls";
+import { sectionHref } from "@/routing/site-urls";
 import { SiteShell } from "@/site-shell/SiteShell";
 
 export const metadata: Metadata = { title: "Page not found · moinb.dev" };
@@ -17,17 +17,17 @@ export function NotFoundContent() {
       </p>
       <ul className="mt-4 flex list-none gap-5 p-0">
         <li>
-          <a href={sectionUrl("home")} className="text-accent">
+          <a href={sectionHref("home", undefined)} className="text-accent">
             Home
           </a>
         </li>
         <li>
-          <a href={sectionUrl("projects")} className="text-accent">
+          <a href={sectionHref("projects", undefined)} className="text-accent">
             Projects
           </a>
         </li>
         <li>
-          <a href={sectionUrl("blog")} className="text-accent">
+          <a href={sectionHref("blog", undefined)} className="text-accent">
             Blog
           </a>
         </li>

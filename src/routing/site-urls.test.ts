@@ -112,6 +112,11 @@ describe("sectionHref", () => {
     );
   });
 
+  it("stays on the current host in path mode, where every section shares it", () => {
+    expect(sectionHref("blog", "projects", "/x", preview)).toBe("/blog/x");
+    expect(sectionHref("home", undefined, "/#about", preview)).toBe("/#about");
+  });
+
   it("returns an absolute url when linking to another section", () => {
     expect(sectionHref("blog", "projects", "/x", production)).toBe(
       "https://blogs.moinb.dev/x",

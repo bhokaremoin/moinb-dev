@@ -1,7 +1,7 @@
 import { posts } from "#site/content";
 import { PostList } from "@/blog/PostList";
 import { latestPosts } from "@/blog/post-queries";
-import { sectionUrl } from "@/routing/site-urls";
+import { sectionHref } from "@/routing/site-urls";
 import { MoreLink } from "@/ui/MoreLink";
 import { PageSection } from "@/ui/PageSection";
 
@@ -11,10 +11,10 @@ export function LatestPosts() {
       <PostList
         posts={latestPosts(posts).map((post) => ({
           ...post,
-          href: sectionUrl("blog", `/${post.slug}`),
+          href: sectionHref("blog", "home", `/${post.slug}`),
         }))}
       />
-      <MoreLink href={sectionUrl("blog")}>
+      <MoreLink href={sectionHref("blog", "home")}>
         All posts on blogs.moinb.dev →
       </MoreLink>
     </PageSection>
