@@ -22,6 +22,14 @@ describe("ProjectsPage", () => {
     expect(screen.getAllByRole("article")).toHaveLength(3);
   });
 
+  it("keeps headings in order for screen readers, with case studies under their own heading", () => {
+    render(<ProjectsPage />);
+
+    expect(
+      screen.getAllByRole("heading").map((heading) => heading.tagName),
+    ).toEqual(["H1", "H2", "H3", "H3", "H3", "H2"]);
+  });
+
   it("has an archive covering every project", () => {
     render(<ProjectsPage />);
 

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { yearOf } from "@/content/format-date";
 import { sectionPath } from "@/routing/site-urls";
 
@@ -19,7 +21,7 @@ function ArchiveLink({ project }: { project: ArchivedProject }) {
   }
   const href =
     link.kind === "case-study" ? sectionPath("projects", link.path) : link.href;
-  return <a href={href}>{link.label}</a>;
+  return <Link href={href}>{link.label}</Link>;
 }
 
 export function ProjectArchive({ projects }: { projects: ArchivedProject[] }) {

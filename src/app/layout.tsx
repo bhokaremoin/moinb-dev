@@ -6,6 +6,7 @@ import {
 } from "next/font/google";
 
 import { site } from "@content/site";
+import { SiteAnalytics } from "@/analytics/SiteAnalytics";
 import { buildThemeScript } from "@/theme/theme-script";
 
 import "./globals.css";
@@ -47,7 +48,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: buildThemeScript() }} />
       </head>
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        {children}
+        <SiteAnalytics />
+      </body>
     </html>
   );
 }

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { formatShortDate } from "@/content/format-date";
 
 import { TilChip } from "./TilChip";
@@ -16,7 +18,7 @@ export function PostList({ posts }: { posts: ListedPost[] }) {
     <ul className="m-0 list-none p-0">
       {posts.map((post) => (
         <li key={post.slug}>
-          <a
+          <Link
             href={post.href}
             className="group border-line flex items-baseline gap-4 border-b py-3 no-underline"
           >
@@ -33,7 +35,7 @@ export function PostList({ posts }: { posts: ListedPost[] }) {
             <span className="text-muted font-mono text-[0.8rem]">
               {post.readingMinutes} min
             </span>
-          </a>
+          </Link>
         </li>
       ))}
     </ul>

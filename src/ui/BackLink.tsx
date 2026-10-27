@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function BackLink({
   href,
   children,
@@ -6,11 +8,11 @@ export function BackLink({
   children: React.ReactNode;
 }) {
   return (
-    <a
+    <Link
       href={href}
       className="text-muted hover:text-foreground text-[0.9rem] no-underline"
     >
       {children}
-    </a>
+    </Link>
   );
 }

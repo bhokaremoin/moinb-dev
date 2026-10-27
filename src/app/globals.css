@@ -203,3 +203,33 @@
 :root[data-theme="dark"] [data-rehype-pretty-code-figure] code span {
   color: var(--shiki-dark);
 }
+
+/* Client-side navigation within a section: a short fade and lift, like the design demo. */
+::view-transition-old(.page-fade) {
+  animation: 150ms ease-out both page-fade-out;
+}
+
+::view-transition-new(.page-fade) {
+  animation: 300ms ease-out both page-fade-in;
+}
+
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

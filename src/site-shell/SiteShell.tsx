@@ -1,3 +1,8 @@
+import { ViewTransition } from "react";
+
+import { posts, projects } from "#site/content";
+import { buildCommandItems } from "@/command-palette/command-items";
+import { CommandPalette } from "@/command-palette/CommandPalette";
 import type { Section } from "@/routing/site-urls";
 
 import { currentYear } from "./current-year";
@@ -23,9 +28,14 @@ export async function SiteShell({
       </a>
       <SiteNav section={section} />
       <main id="main-content" className="page-column flex-1 pt-12 pb-20">
-        {children}
+        {/* Animates client-side navigations within a section; see globals.css. */}
+        <ViewTransition default="page-fade">{children}</ViewTransition>
       </main>
       <SiteFooter section={section} year={year} />
+      <CommandPalette
+        items={buildCommandItems({ projects, posts })}
+        section={section}
+      />
     </>
   );
 }

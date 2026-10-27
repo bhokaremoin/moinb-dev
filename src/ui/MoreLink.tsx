@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function MoreLink({
   href,
   children,
@@ -6,11 +8,11 @@ export function MoreLink({
   children: React.ReactNode;
 }) {
   return (
-    <a
+    <Link
       href={href}
       className="text-accent mt-[18px] inline-block font-medium no-underline hover:underline"
     >
       {children}
-    </a>
+    </Link>
   );
 }
