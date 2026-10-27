@@ -47,6 +47,13 @@ const items: CommandItem[] = [
     action: { kind: "navigate", section: "blog", path: "/rest-to-trpc" },
   },
   {
+    id: "email",
+    label: "Copy email",
+    hint: "action",
+    group: "Actions",
+    action: { kind: "copy-email" },
+  },
+  {
     id: "theme",
     label: "Toggle theme",
     hint: "action",
@@ -143,6 +150,30 @@ describe("CommandPalette", () => {
     await userEvent.click(screen.getByRole("option", { name: /Toggle theme/ }));
 
     expect(document.documentElement.dataset.theme).toBe("dark");
+  });
+
+  it("confirms when the email was copied", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("navigator", { ...navigator, clipboard: { writeText } });
+    render(<CommandPalette items={items} section="home" />);
+    await userEvent.keyboard("{Control>}k{/Control}");
+
+    await userEvent.click(screen.getByRole("option", { name: /Copy email/ }));
+
+    expect(writeText).toHaveBeenCalledWith("hello@moinb.dev");
+    expect(await screen.findByRole("status")).toHaveTextContent("Email copied");
+  });
+
+  it("shows the address when copying is not possible", async () => {
+    vi.stubGlobal("navigator", { ...navigator, clipboard: undefined });
+    render(<CommandPalette items={items} section="home" />);
+    await userEvent.keyboard("{Control>}k{/Control}");
+
+    await userEvent.click(screen.getByRole("option", { name: /Copy email/ }));
+
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Couldn't copy. Email me at hello@moinb.dev",
+    );
   });
 
   it("closes with Escape", async () => {
