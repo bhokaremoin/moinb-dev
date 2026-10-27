@@ -1,0 +1,44 @@
+---
+# PLACEHOLDER: sample case study. Replace with a real project.
+title: Queueless
+tagline: clinic queues over SMS
+summary: Clinic appointment queue with SMS updates, used by 3 local clinics.
+date: 2024-06-01
+type: Client
+stack: [React, Express, Twilio]
+role: Freelance, full-stack
+timeline: 8 weeks, 2024
+users: 3 clinics
+repoUrl: https://github.com/bhokaremoin
+featured: true
+architecture: [React front desk, Express API, Postgres, Twilio SMS]
+metrics:
+  - { value: "3", label: clinics live }
+  - { value: 40%, label: shorter waiting-room time }
+  - { value: "0", label: missed-turn complaints }
+---
+
+## The problem
+
+Patients waited in crowded rooms for hours because nobody knew when their turn would come.
+
+## Constraints
+
+- Front-desk staff had five minutes of training time.
+- Patients only reliably have SMS, not smartphones.
+
+## Architecture
+
+<ArchitectureDiagram />
+
+## Key decisions
+
+**SMS over a web app for patients.** Every patient could receive a text; far fewer would open a link.
+
+## Results
+
+<MetricCards />
+
+## What I'd do differently
+
+Measure wait times before launch, so the improvement could be proven rather than estimated.

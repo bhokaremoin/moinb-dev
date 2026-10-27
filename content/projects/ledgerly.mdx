@@ -1,0 +1,48 @@
+---
+# PLACEHOLDER: sample case study from the design demo. Replace with a real project.
+title: Ledgerly
+tagline: splitting rent without the spreadsheet
+summary: Expense splitting for flatmates with real-time balances and UPI settle-up links.
+date: 2025-08-01
+type: Full-stack
+stack: [Next.js, tRPC, Postgres]
+role: Solo, design to deploy
+timeline: 6 weeks, 2025
+users: 120 households
+liveUrl: https://example.com
+repoUrl: https://github.com/bhokaremoin
+featured: true
+architecture: [Next.js UI, tRPC API, Postgres (Neon), UPI deep link]
+metrics:
+  - { value: "120", label: households in 3 months }
+  - { value: 0.9s, label: load on 3G }
+  - { value: ₹0, label: monthly hosting }
+---
+
+## The problem
+
+My flat tracked shared costs in a Google Sheet. Nobody updated it, and every month ended with an awkward conversation about who owed what.
+
+## Constraints
+
+- Must work on cheap Android phones over slow data.
+- No app install. Flatmates would not download another app.
+- Zero hosting budget beyond free tiers.
+
+## Architecture
+
+<ArchitectureDiagram />
+
+## Key decisions
+
+**tRPC over REST.** One developer, one codebase. End-to-end types removed a whole class of bugs and I didn't need a public API.
+
+**Store balances as a ledger, not totals.** Every expense is an immutable row, and balances are computed. This made "undo" and history trivial.
+
+## Results
+
+<MetricCards />
+
+## What I'd do differently
+
+Add offline support from day one. Most bills get logged at the shop counter, where the signal is worst.

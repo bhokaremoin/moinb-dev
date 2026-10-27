@@ -1,0 +1,23 @@
+---
+# PLACEHOLDER: sample post.
+title: Debugging a 3-second TTFB in Next.js
+date: 2026-09-28
+tags: [nextjs, performance]
+summary: How a single uncached fetch in a layout made every page slow, and how I found it.
+---
+
+## The symptom
+
+Every page took three seconds to start streaming, even static ones.
+
+## Finding the cause
+
+A fetch in the root layout had no caching, so it ran on every request and blocked the whole tree.
+
+```ts title="app/layout.tsx"
+const settings = await fetch("https://api.example.com/settings");
+```
+
+## The fix
+
+Moving the call into a cached function brought time to first byte under 200ms.

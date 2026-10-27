@@ -1,0 +1,14 @@
+---
+# PLACEHOLDER: sample TIL.
+title: "TIL: structuredClone exists"
+date: 2025-11-02
+tags: [javascript]
+til: true
+summary: A built-in deep copy that handles dates, maps and sets.
+---
+
+`structuredClone` deep-copies objects, including `Date`, `Map` and `Set`, without `JSON.parse(JSON.stringify(...))` tricks.
+
+```js title="clone.js"
+const copy = structuredClone({ when: new Date(), tags: new Set(["a"]) });
+```

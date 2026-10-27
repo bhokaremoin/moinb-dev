@@ -1,0 +1,35 @@
+---
+# PLACEHOLDER: sample post from the design demo.
+title: Why I moved my side projects from REST to tRPC
+date: 2026-10-12
+tags: [nextjs, typescript]
+summary: Hand-copied types between an Express API and a React app kept drifting. tRPC removed the busywork.
+---
+
+## The problem with my REST setup
+
+Every side project started the same way: an Express API, a React frontend, and a types file I copied between them by hand. They drifted apart within a week.
+
+```ts title="server/routers/expense.ts"
+export const expenseRouter = router({
+  add: protectedProcedure
+    .input(z.object({ amount: z.number(), note: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // fully typed on the client, no copy-paste
+      return ctx.db.expense.create({ data: input });
+    }),
+});
+```
+
+<Callout>
+  **Short version:** if the frontend and backend live in one repo and only you
+  call the API, tRPC removes a lot of busywork.
+</Callout>
+
+## Migrating one route at a time
+
+I kept the old REST routes running and moved one feature per evening. Each migrated route deleted a chunk of hand-written types.
+
+## When I'd still pick REST
+
+When other teams or the public call the API, a documented REST or OpenAPI contract is worth the extra typing.

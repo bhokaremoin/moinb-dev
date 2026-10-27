@@ -1,0 +1,14 @@
+---
+# PLACEHOLDER: sample TIL.
+title: "TIL: Postgres partial indexes saved our dashboard"
+date: 2026-09-03
+tags: [postgres]
+til: true
+summary: An index on only the unpaid invoices made the dashboard query 40x faster.
+---
+
+Most invoices are paid, but the dashboard only asks for unpaid ones. A partial index covers just those rows:
+
+```sql title="migrations/add_unpaid_index.sql"
+CREATE INDEX invoices_unpaid_idx ON invoices (due_date) WHERE paid_at IS NULL;
+```
