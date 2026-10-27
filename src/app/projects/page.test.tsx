@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import ProjectsPage from "./page";
+import ProjectsPage, { metadata } from "./page";
 
 describe("ProjectsPage", () => {
   it("introduces the projects", () => {
@@ -26,5 +26,11 @@ describe("ProjectsPage", () => {
     render(<ProjectsPage />);
 
     expect(screen.getByRole("table")).toHaveTextContent("dotfiles");
+  });
+});
+
+describe("projects index metadata", () => {
+  it("is canonical on the projects host", () => {
+    expect(metadata.alternates?.canonical).toBe("https://projects.moinb.dev/");
   });
 });

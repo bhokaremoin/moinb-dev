@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import CaseStudyPage, { generateStaticParams } from "./page";
+import CaseStudyPage, { generateMetadata, generateStaticParams } from "./page";
 
 async function renderCaseStudy(slug: string) {
   render(
@@ -101,5 +101,22 @@ describe("CaseStudyPage", () => {
 
   it("is not found for an unknown slug", async () => {
     await expect(renderCaseStudy("missing")).rejects.toThrow();
+  });
+});
+
+describe("case study metadata", () => {
+  it("is canonical on the projects host with its own share image", async () => {
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug: "ledgerly" }),
+      searchParams: Promise.resolve({}),
+    });
+
+    expect(metadata.title).toBe("Ledgerly");
+    expect(metadata.alternates?.canonical).toBe(
+      "https://projects.moinb.dev/ledgerly",
+    );
+    expect(metadata.openGraph).toMatchObject({
+      images: [{ url: "https://projects.moinb.dev/ledgerly/og.png" }],
+    });
   });
 });

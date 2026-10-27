@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import NowPage from "./page";
+import NowPage, { metadata } from "./page";
 
 describe("NowPage", () => {
   it("says what I'm doing now and when it was updated", () => {
@@ -14,5 +14,11 @@ describe("NowPage", () => {
     expect(
       screen.getByText("Interviewing for full-stack roles."),
     ).toBeInTheDocument();
+  });
+});
+
+describe("now page metadata", () => {
+  it("is canonical on the root host", () => {
+    expect(metadata.alternates?.canonical).toBe("https://moinb.dev/now");
   });
 });

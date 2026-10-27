@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import BlogPage from "./page";
+import BlogPage, { metadata } from "./page";
 
 describe("BlogPage", () => {
   it("introduces the writing and groups posts by year", () => {
@@ -24,5 +24,14 @@ describe("BlogPage", () => {
     expect(
       screen.getByRole("link", { name: /Postgres partial indexes/ }),
     ).toHaveTextContent("TIL");
+  });
+});
+
+describe("blog index metadata", () => {
+  it("is canonical on the blogs host and advertises the feed", () => {
+    expect(metadata.alternates?.canonical).toBe("https://blogs.moinb.dev/");
+    expect(metadata.alternates?.types).toEqual({
+      "application/rss+xml": "https://blogs.moinb.dev/rss.xml",
+    });
   });
 });

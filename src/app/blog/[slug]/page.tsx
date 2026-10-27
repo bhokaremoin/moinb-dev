@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { posts } from "#site/content";
@@ -9,6 +10,7 @@ import { adjacentItems } from "@/content/adjacent-items";
 import { formatLongDate } from "@/content/format-date";
 import { MdxContent } from "@/content/MdxContent";
 import { sectionPath } from "@/routing/site-urls";
+import { pageMetadata } from "@/seo/page-metadata";
 import { BackLink } from "@/ui/BackLink";
 import { PrevNextLinks } from "@/ui/PrevNextLinks";
 
@@ -26,6 +28,24 @@ export const instant = false;
 
 export function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/blog/[slug]">): Promise<Metadata> {
+  const { slug } = await params;
+  const post = posts.find((candidate) => candidate.slug === slug);
+  if (!post) {
+    return {};
+  }
+  return pageMetadata({
+    section: "blog",
+    path: `/${slug}`,
+    title: post.title,
+    description: post.summary,
+    ogImagePath: `/${slug}/og.png`,
+    publishedTime: post.date,
+  });
 }
 
 export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
