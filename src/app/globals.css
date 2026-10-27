@@ -1,25 +1,122 @@
 @import "tailwindcss";
 
+/* Tokens copied from the approved design demo. Dark mode follows the system unless the visitor
+   picked a theme, which the inline theme script stores in `data-theme` before first paint. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --fg: #14161c;
+  --muted: #5d6472;
+  --line: #e3e6ec;
+  --accent: #2b47c9;
+  --accent-soft: #e8ecfb;
+  --code-bg: #f0f2f6;
+  --status: #2fa86a;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --bg: #0f1115;
+    --surface: #161920;
+    --fg: #e8eaf0;
+    --muted: #949bab;
+    --line: #262a33;
+    --accent: #8fa3ff;
+    --accent-soft: #1c2340;
+    --code-bg: #1a1d25;
+    color-scheme: dark;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+:root[data-theme="dark"] {
+  --bg: #0f1115;
+  --surface: #161920;
+  --fg: #e8eaf0;
+  --muted: #949bab;
+  --line: #262a33;
+  --accent: #8fa3ff;
+  --accent-soft: #1c2340;
+  --code-bg: #1a1d25;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-foreground: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-code: var(--code-bg);
+  --color-status: var(--status);
+  --font-display: var(--font-bricolage), "Segoe UI", system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), system-ui, -apple-system, sans-serif;
+  --font-mono:
+    var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer base {
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@utility page-column {
+  width: 100%;
+  max-width: 680px;
+  margin-inline: auto;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px));
+}
+
+@utility icon-button {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: var(--muted);
+  font: 500 0.75rem var(--font-mono);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--fg);
+    border-color: var(--muted);
+  }
+}
+
+@utility eyebrow {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

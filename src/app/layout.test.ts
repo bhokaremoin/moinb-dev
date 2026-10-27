@@ -4,8 +4,9 @@ import { metadata } from "./layout";
 
 // next/font/google only works inside Next's compiler, so stub the font loaders.
 vi.mock("next/font/google", () => ({
-  Geist: () => ({ variable: "" }),
-  Geist_Mono: () => ({ variable: "" }),
+  Bricolage_Grotesque: () => ({ variable: "" }),
+  IBM_Plex_Sans: () => ({ variable: "" }),
+  JetBrains_Mono: () => ({ variable: "" }),
 }));
 
 describe("site metadata", () => {
