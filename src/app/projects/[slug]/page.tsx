@@ -13,6 +13,10 @@ import { BackLink } from "@/ui/BackLink";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { PrevNextLinks } from "@/ui/PrevNextLinks";
 
+// Every real slug is prerendered by generateStaticParams; only unknown slugs reach the
+// request-time fallback, which renders a 404, so blocking on params there is fine.
+export const instant = false;
+
 export function generateStaticParams() {
   return caseStudies(projects).map((project) => ({ slug: project.slug }));
 }
