@@ -66,3 +66,9 @@ test("the nav moves between subdomains", async ({ page }) => {
     page.getByRole("heading", { level: 1, name: "Writing" }),
   ).toBeVisible();
 });
+
+test("archive-only projects have no case study page", async ({ request }) => {
+  const response = await request.get(`${PROJECTS_URL}/dotfiles`);
+
+  expect(response.status()).toBe(404);
+});

@@ -22,13 +22,14 @@ export function sortProjectsByDate<T extends ProjectSummary>(
   return sortByDateDescending(projects);
 }
 
+/** Featured cards link to a case study, so archive-only projects can't be featured. */
 export function featuredProjects<T extends ProjectSummary>(
   projects: T[],
   limit = FEATURED_LIMIT,
 ): T[] {
-  return sortProjectsByDate(
-    projects.filter((project) => project.featured),
-  ).slice(0, limit);
+  return caseStudies(projects)
+    .filter((project) => project.featured)
+    .slice(0, limit);
 }
 
 export function projectTypes(projects: { type: string }[]): string[] {
