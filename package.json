@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test",
-    "content": "velite build --strict"
+    "content": "velite build --strict",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@giscus/react": "^3.1.0",
@@ -26,6 +27,7 @@
     "velite": "^0.4.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/turbopack": "^4",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
