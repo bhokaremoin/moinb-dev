@@ -1,0 +1,46 @@
+import { formatShortDate } from "@/content/format-date";
+
+import { TilChip } from "./TilChip";
+
+type ListedPost = {
+  slug: string;
+  title: string;
+  date: string;
+  til: boolean;
+  readingMinutes: number;
+};
+
+export function PostList({
+  posts,
+  hrefFor,
+}: {
+  posts: ListedPost[];
+  hrefFor: (slug: string) => string;
+}) {
+  return (
+    <ul className="m-0 list-none p-0">
+      {posts.map((post) => (
+        <li key={post.slug}>
+          <a
+            href={hrefFor(post.slug)}
+            className="group border-line flex items-baseline gap-4 border-b py-3 no-underline"
+          >
+            <time
+              dateTime={post.date}
+              className="text-muted flex-[0_0_72px] font-mono text-[0.8rem]"
+            >
+              {formatShortDate(post.date)}
+            </time>
+            <span className="group-hover:text-accent min-w-0 flex-1">
+              {post.title}
+              {post.til && <TilChip />}
+            </span>
+            <span className="text-muted font-mono text-[0.8rem]">
+              {post.readingMinutes} min
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
