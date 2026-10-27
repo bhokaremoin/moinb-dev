@@ -11,10 +11,10 @@ accessible, mobile-friendly, and have no broken links or "coming soon" pages.
 
 ## Hosts and routing
 
-| Public URL | Internal route |
-|---|---|
-| `moinb.dev/`, `/now`, `/uses` | `/`, `/now`, `/uses` |
-| `projects.moinb.dev/`, `/[slug]` | `/projects`, `/projects/[slug]` |
+| Public URL                                | Internal route                           |
+| ----------------------------------------- | ---------------------------------------- |
+| `moinb.dev/`, `/now`, `/uses`             | `/`, `/now`, `/uses`                     |
+| `projects.moinb.dev/`, `/[slug]`          | `/projects`, `/projects/[slug]`          |
 | `blogs.moinb.dev/`, `/[slug]`, `/rss.xml` | `/blog`, `/blog/[slug]`, `/blog/rss.xml` |
 
 - One Next.js app. `src/proxy.ts` calls a pure function `resolveRoute({ host, pathname })` from
@@ -48,7 +48,7 @@ accessible, mobile-friendly, and have no broken links or "coming soon" pages.
 - Velite (`velite.config.ts`) compiles MDX in `content/` into typed data in `.velite/`
   (git-ignored). It is started from `next.config.ts` so `dev`/`build` stay single commands.
 - `projects`: `title, summary, date, type, stack[], role, timeline, users, liveUrl?, repoUrl?,
-  featured, metrics[{ value, label }]` plus three additions: `tagline?` (case-study heading reads
+featured, metrics[{ value, label }]` plus three additions: `tagline?` (case-study heading reads
   "title: tagline"), `architecture[]` (ordered node labels for the simple diagram) and
   `caseStudy` (default true). `summary` is the one-line outcome on cards and the case-study
   subtitle. The MDX body holds problem, constraints, decisions and what I'd do differently.
