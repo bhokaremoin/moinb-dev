@@ -50,6 +50,14 @@ describe("featuredProjects", () => {
     ]);
   });
 
+  it("skips archive-only projects even when featured, as they have no page to link to", () => {
+    expect(
+      featuredProjects([
+        project({ slug: "archive-only", featured: true, caseStudy: false }),
+      ]),
+    ).toEqual([]);
+  });
+
   it("skips projects that are not featured", () => {
     expect(featuredProjects([project({ slug: "plain" })])).toEqual([]);
   });
