@@ -24,6 +24,33 @@ describe("theme script", () => {
     expect(document.documentElement.dataset.theme).toBe("dark");
   });
 
+  it("finds the theme among other cookies", () => {
+    document.cookie = "a=1; Path=/";
+    document.cookie = "theme=light; Path=/";
+
+    runThemeScript();
+
+    expect(document.documentElement.dataset.theme).toBe("light");
+    document.cookie = "a=; Max-Age=0; Path=/";
+  });
+
+  it("ignores cookies whose name only ends with theme", () => {
+    document.cookie = "colortheme=dark; Path=/";
+
+    runThemeScript();
+
+    expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
+    document.cookie = "colortheme=; Max-Age=0; Path=/";
+  });
+
+  it("ignores values that only start with a theme name", () => {
+    document.cookie = "theme=darkness; Path=/";
+
+    runThemeScript();
+
+    expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
+  });
+
   it("leaves the theme to the system preference when nothing is saved", () => {
     runThemeScript();
 
