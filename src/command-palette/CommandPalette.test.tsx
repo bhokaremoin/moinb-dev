@@ -83,6 +83,7 @@ describe("CommandPalette", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
+    vi.useRealTimers();
     push.mockReset();
     assign.mockReset();
   });
@@ -190,6 +191,37 @@ describe("CommandPalette", () => {
     expect(await screen.findByRole("status")).toHaveTextContent(
       "Couldn't copy. Email me at hello@moinb.dev",
     );
+  });
+
+  it("clears the copied confirmation after a few seconds", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("navigator", { ...navigator, clipboard: { writeText } });
+    render(<CommandPalette items={items} section="home" />);
+    await user.keyboard("{Control>}k{/Control}");
+    await user.click(screen.getByRole("option", { name: /Copy email/ }));
+    expect(await screen.findByText("Email copied")).toBeInTheDocument();
+
+    act(() => vi.advanceTimersByTime(3000));
+
+    expect(screen.getByRole("status")).toBeEmptyDOMElement();
+  });
+
+  it("keeps the address on screen until the palette is opened again", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    vi.stubGlobal("navigator", { ...navigator, clipboard: undefined });
+    render(<CommandPalette items={items} section="home" />);
+    await user.keyboard("{Control>}k{/Control}");
+    await user.click(screen.getByRole("option", { name: /Copy email/ }));
+    await screen.findByText(/Couldn't copy/);
+
+    act(() => vi.advanceTimersByTime(60_000));
+    expect(screen.getByRole("status")).toHaveTextContent("hello@moinb.dev");
+
+    await user.keyboard("{Control>}k{/Control}");
+    expect(screen.getByRole("status")).toBeEmptyDOMElement();
   });
 
   it("closes with Escape", async () => {

@@ -21,7 +21,14 @@ function matchesSearch(_value: string, search: string, keywords?: string[]) {
   return searchable.includes(search.trim().toLowerCase()) ? 1 : 0;
 }
 
-const STATUS_DURATION_MS = 2500;
+type CopyResult = "copied" | "failed";
+
+const COPY_MESSAGES: Record<CopyResult, string> = {
+  copied: "Email copied",
+  failed: `Couldn't copy. Email me at ${site.email}`,
+};
+
+const COPIED_MESSAGE_DURATION_MS = 2500;
 
 function isCommandMenuShortcut(event: KeyboardEvent): boolean {
   return (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
@@ -35,25 +42,25 @@ export function CommandPalette({
   section: Section | undefined;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<string>();
+  const [copyResult, setCopyResult] = useState<CopyResult>();
   const router = useRouter();
 
+  // The failure message carries the address itself, so it stays until the palette is used again
+  // rather than vanishing before the visitor can note it down.
   useEffect(() => {
-    if (!statusMessage) {
+    if (copyResult !== "copied") {
       return;
     }
     const timer = setTimeout(
-      () => setStatusMessage(undefined),
-      STATUS_DURATION_MS,
+      () => setCopyResult(undefined),
+      COPIED_MESSAGE_DURATION_MS,
     );
     return () => clearTimeout(timer);
-  }, [statusMessage]);
+  }, [copyResult]);
 
   async function copyEmail() {
     const isCopied = await copyToClipboard(site.email);
-    setStatusMessage(
-      isCopied ? "Email copied" : `Couldn't copy. Email me at ${site.email}`,
-    );
+    setCopyResult(isCopied ? "copied" : "failed");
   }
 
   useEffect(() => {
@@ -62,9 +69,11 @@ export function CommandPalette({
         return;
       }
       event.preventDefault();
+      setCopyResult(undefined);
       setIsOpen((wasOpen) => !wasOpen);
     }
     function open() {
+      setCopyResult(undefined);
       setIsOpen(true);
     }
 
@@ -104,7 +113,7 @@ export function CommandPalette({
         aria-live="polite"
         className="bg-foreground text-background fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg px-4 py-2 text-sm empty:hidden"
       >
-        {statusMessage}
+        {copyResult && COPY_MESSAGES[copyResult]}
       </p>
       <Command.Dialog
         open={isOpen}
