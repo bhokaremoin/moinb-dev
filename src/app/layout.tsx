@@ -5,6 +5,7 @@ import {
   JetBrains_Mono,
 } from "next/font/google";
 
+import { site } from "@content/site";
 import { buildThemeScript } from "@/theme/theme-script";
 
 import "./globals.css";
@@ -28,7 +29,10 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://moinb.dev"),
-  title: "moinb.dev",
+  title: {
+    default: `${site.name} · Full-stack developer`,
+    template: "%s · moinb.dev",
+  },
   description: "Portfolio and showcase of the applications Moin builds.",
 };
 

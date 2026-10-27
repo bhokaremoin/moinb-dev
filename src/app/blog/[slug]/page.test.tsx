@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import PostPage, { generateStaticParams } from "./page";
+import PostPage, { generateMetadata, generateStaticParams } from "./page";
 
 async function renderPost(slug: string) {
   render(
@@ -57,5 +57,22 @@ describe("PostPage", () => {
 
   it("is not found for an unknown slug", async () => {
     await expect(renderPost("missing")).rejects.toThrow();
+  });
+});
+
+describe("post metadata", () => {
+  it("is an article canonical on the blogs host with its own share image", async () => {
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug: "rest-to-trpc" }),
+      searchParams: Promise.resolve({}),
+    });
+
+    expect(metadata.alternates?.canonical).toBe(
+      "https://blogs.moinb.dev/rest-to-trpc",
+    );
+    expect(metadata.openGraph).toMatchObject({
+      type: "article",
+      images: [{ url: "https://blogs.moinb.dev/rest-to-trpc/og.png" }],
+    });
   });
 });

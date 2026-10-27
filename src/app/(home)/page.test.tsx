@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import HomePage from "./page";
+import HomePage, { metadata } from "./page";
 
 function renderHome() {
   render(<HomePage />);
@@ -106,5 +106,14 @@ describe("HomePage", () => {
     expect(
       within(contact).getByRole("button", { name: "Copy email" }),
     ).toBeInTheDocument();
+  });
+});
+
+describe("home page metadata", () => {
+  it("is the canonical root of the site", () => {
+    expect(metadata.alternates?.canonical).toBe("https://moinb.dev/");
+    expect(metadata.title).toEqual({
+      absolute: "Moin B · Full-stack developer",
+    });
   });
 });

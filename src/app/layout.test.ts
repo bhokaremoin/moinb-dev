@@ -10,8 +10,11 @@ vi.mock("next/font/google", () => ({
 }));
 
 describe("site metadata", () => {
-  it("uses the domain as the page title", () => {
-    expect(metadata.title).toBe("moinb.dev");
+  it("titles pages after the site, with a default for pages without their own", () => {
+    expect(metadata.title).toEqual({
+      default: "Moin B · Full-stack developer",
+      template: "%s · moinb.dev",
+    });
   });
 
   it("describes the site as a portfolio", () => {

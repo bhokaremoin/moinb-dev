@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { projects } from "#site/content";
@@ -9,6 +10,7 @@ import { MetricCards } from "@/projects/MetricCards";
 import { caseStudies } from "@/projects/project-queries";
 import { ScreenshotFrame } from "@/projects/ScreenshotFrame";
 import { sectionPath } from "@/routing/site-urls";
+import { pageMetadata } from "@/seo/page-metadata";
 import { BackLink } from "@/ui/BackLink";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { PrevNextLinks } from "@/ui/PrevNextLinks";
@@ -21,12 +23,33 @@ export function generateStaticParams() {
   return caseStudies(projects).map((project) => ({ slug: project.slug }));
 }
 
+function findCaseStudy(slug: string) {
+  return caseStudies(projects).find((study) => study.slug === slug);
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/projects/[slug]">): Promise<Metadata> {
+  const { slug } = await params;
+  const project = findCaseStudy(slug);
+  if (!project) {
+    return {};
+  }
+  return pageMetadata({
+    section: "projects",
+    path: `/${slug}`,
+    title: project.title,
+    description: project.summary,
+    ogImagePath: `/${slug}/og.png`,
+  });
+}
+
 export default async function CaseStudyPage({
   params,
 }: PageProps<"/projects/[slug]">) {
   const { slug } = await params;
   const studies = caseStudies(projects);
-  const project = studies.find((study) => study.slug === slug);
+  const project = findCaseStudy(slug);
   if (!project) {
     notFound();
   }
