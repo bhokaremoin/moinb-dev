@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { site } from "@content/site";
-import { type Section, sectionPath, sectionUrl } from "@/routing/site-urls";
+import { type Section, sectionHref, sectionPath } from "@/routing/site-urls";
 import { toggleTheme } from "@/theme/toggle-theme";
 import { copyToClipboard } from "@/ui/copy-to-clipboard";
 
@@ -71,7 +71,7 @@ export function CommandPalette({
       router.push(sectionPath(action.section, action.path));
       return;
     }
-    window.location.assign(sectionUrl(action.section, action.path));
+    window.location.assign(sectionHref(action.section, section, action.path));
   }
 
   const groups = [...new Set(items.map((item) => item.group))];

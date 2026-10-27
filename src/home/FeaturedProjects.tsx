@@ -1,7 +1,7 @@
 import { projects } from "#site/content";
 import { ProjectCard } from "@/projects/ProjectCard";
 import { featuredProjects } from "@/projects/project-queries";
-import { sectionUrl } from "@/routing/site-urls";
+import { sectionHref } from "@/routing/site-urls";
 import { MoreLink } from "@/ui/MoreLink";
 import { PageSection } from "@/ui/PageSection";
 
@@ -13,11 +13,11 @@ export function FeaturedProjects() {
           <ProjectCard
             key={project.slug}
             project={project}
-            href={sectionUrl("projects", `/${project.slug}`)}
+            href={sectionHref("projects", "home", `/${project.slug}`)}
           />
         ))}
       </div>
-      <MoreLink href={sectionUrl("projects")}>
+      <MoreLink href={sectionHref("projects", "home")}>
         All projects on projects.moinb.dev →
       </MoreLink>
     </PageSection>
