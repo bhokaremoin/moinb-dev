@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  parseTheme,
-  readThemeCookie,
-  serializeThemeCookie,
-} from "./theme-cookie";
+import { parseTheme, serializeThemeCookie } from "./theme-cookie";
 
 describe("parseTheme", () => {
   it("accepts light and dark", () => {
@@ -15,20 +11,6 @@ describe("parseTheme", () => {
   it("ignores unknown or missing values so the system preference wins", () => {
     expect(parseTheme("purple")).toBeUndefined();
     expect(parseTheme(undefined)).toBeUndefined();
-  });
-});
-
-describe("readThemeCookie", () => {
-  it("finds the theme among other cookies", () => {
-    expect(readThemeCookie("a=1; theme=light; b=2")).toBe("light");
-  });
-
-  it("ignores a theme cookie with an invalid value", () => {
-    expect(readThemeCookie("theme=purple")).toBeUndefined();
-  });
-
-  it("does not match cookies whose name only ends with theme", () => {
-    expect(readThemeCookie("colortheme=dark")).toBeUndefined();
   });
 });
 

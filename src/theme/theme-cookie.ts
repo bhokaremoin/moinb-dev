@@ -11,15 +11,6 @@ export function parseTheme(value: string | undefined): Theme | undefined {
   return undefined;
 }
 
-export function readThemeCookie(cookieHeader: string): Theme | undefined {
-  const themeCookie = cookieHeader
-    .split(";")
-    .map((cookie) => cookie.trim())
-    .find((cookie) => cookie.startsWith(`${THEME_COOKIE}=`));
-
-  return parseTheme(themeCookie?.slice(THEME_COOKIE.length + 1));
-}
-
 /** `domain` shares the cookie across subdomains; leave it undefined for a host-only cookie. */
 export function serializeThemeCookie(
   theme: Theme,
