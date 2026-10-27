@@ -7,7 +7,8 @@ import { ThemeToggle } from "@/theme/ThemeToggle";
 const NAV_LINK_CLASS =
   "text-[0.92rem] text-muted no-underline hover:text-foreground aria-[current=page]:text-foreground";
 
-export function SiteNav({ section }: { section: Section }) {
+/** `section` is undefined on pages served on any host, which makes every link absolute. */
+export function SiteNav({ section }: { section: Section | undefined }) {
   const currentPage = (target: Section) =>
     target === section ? ("page" as const) : undefined;
 

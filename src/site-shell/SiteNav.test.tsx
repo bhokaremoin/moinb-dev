@@ -28,6 +28,18 @@ describe("SiteNav", () => {
     );
   });
 
+  it("links every section absolutely when there is no current section", () => {
+    render(<SiteNav section={undefined} />);
+
+    expect(screen.getByRole("link", { name: "About" })).toHaveAttribute(
+      "href",
+      "https://moinb.dev/#about",
+    );
+    expect(screen.getByRole("link", { name: "Projects" })).not.toHaveAttribute(
+      "aria-current",
+    );
+  });
+
   it("links within the current section by path", () => {
     render(<SiteNav section="projects" />);
 

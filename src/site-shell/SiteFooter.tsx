@@ -9,7 +9,7 @@ export function SiteFooter({
   section,
   year,
 }: {
-  section: Section;
+  section: Section | undefined;
   year: number;
 }) {
   return (

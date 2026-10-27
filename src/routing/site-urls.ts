@@ -19,13 +19,19 @@ export const SECTION_PREFIXES = {
   blog: "/blog",
 } as const satisfies Record<Exclude<Section, "home">, string>;
 
+function isLocalHostname(hostname: string): boolean {
+  return hostname === "localhost" || hostname.endsWith(".localhost");
+}
+
 export function createRoutingConfig(env: {
   rootDomain?: string;
   vercelUrl?: string;
 }): RoutingConfig {
   const rootDomain = env.rootDomain?.trim().toLowerCase();
   if (rootDomain) {
-    const protocol = rootDomain.startsWith("localhost") ? "http" : "https";
+    const protocol = isLocalHostname(rootDomain.split(":")[0])
+      ? "http"
+      : "https";
     return { mode: "host", rootDomain, protocol };
   }
 
@@ -77,10 +83,13 @@ export function sectionUrl(
   return `${config.protocol}://${sectionHost(section, config.rootDomain)}${path}`;
 }
 
-/** A link target from a page in `current`: a relative path within a section, absolute across them. */
+/**
+ * A link target from a page in `current`: a relative path within a section, absolute across
+ * them. Pass `undefined` when the page can appear on any host, such as the 404 page.
+ */
 export function sectionHref(
   target: Section,
-  current: Section,
+  current: Section | undefined,
   path = "/",
   config: RoutingConfig = routingConfig,
 ): string {
@@ -99,7 +108,8 @@ export function cookieDomain(
   }
 
   const hostname = config.rootDomain.split(":")[0];
-  // Browsers reject `Domain=localhost`; host-only localhost cookies are handled in the e2e tests.
+  // Browsers never send a `Domain=localhost` cookie to its subdomains, which is why local
+  // development uses a named root such as `moinb.localhost`.
   if (hostname === "localhost") {
     return undefined;
   }

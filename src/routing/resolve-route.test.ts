@@ -126,3 +126,38 @@ describe("resolveRoute in path mode", () => {
     ).toEqual({ action: "next" });
   });
 });
+
+describe("resolveRoute with the published slugs", () => {
+  const publishedSlugs = { projects: ["ledgerly"], blog: ["rest-to-trpc"] };
+
+  function resolve(host: string, pathname: string) {
+    return resolveRoute({ host, pathname }, production, publishedSlugs);
+  }
+
+  it("rewrites a published slug as usual", () => {
+    expect(resolve("projects.moinb.dev", "/ledgerly")).toEqual({
+      action: "rewrite",
+      pathname: "/projects/ledgerly",
+    });
+  });
+
+  it("answers an unknown slug with not-found before the page renders", () => {
+    expect(resolve("projects.moinb.dev", "/missing")).toEqual({
+      action: "not-found",
+    });
+    expect(resolve("blogs.moinb.dev", "/ledgerly")).toEqual({
+      action: "not-found",
+    });
+  });
+
+  it("leaves section files and the index to their own routes", () => {
+    for (const pathname of [
+      "/",
+      "/sitemap.xml",
+      "/rss.xml",
+      "/ledgerly/og.png",
+    ]) {
+      expect(resolve("blogs.moinb.dev", pathname).action).toBe("rewrite");
+    }
+  });
+});
