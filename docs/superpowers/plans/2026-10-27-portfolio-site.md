@@ -21,9 +21,9 @@ Vitest 5 + RTL, Playwright 1.64.
 
 - One column `max-width: 680px`, 16px side gutter, sticky slim nav, one accent colour.
 - Tokens verbatim from the demo: light `--bg #f7f8fa --surface #ffffff --fg #14161c --muted #5d6472
-  --line #e3e6ec --accent #2b47c9 --accent-soft #e8ecfb --code-bg #f0f2f6`; dark `--bg #0f1115
-  --surface #161920 --fg #e8eaf0 --muted #949bab --line #262a33 --accent #8fa3ff
-  --accent-soft #1c2340 --code-bg #1a1d25`.
+--line #e3e6ec --accent #2b47c9 --accent-soft #e8ecfb --code-bg #f0f2f6`; dark `--bg #0f1115
+--surface #161920 --fg #e8eaf0 --muted #949bab --line #262a33 --accent #8fa3ff
+--accent-soft #1c2340 --code-bg #1a1d25`.
 - Fonts via `next/font/google`: Bricolage Grotesque (headings), IBM Plex Sans (body), JetBrains Mono
   (dates, tags, code only).
 - No skill bars, no "coming soon" pages, no link that 404s.
@@ -55,29 +55,50 @@ Vitest 5 + RTL, Playwright 1.64.
 ### Task 1: Site URL helpers (routing core)
 
 **Files:**
+
 - Create: `src/routing/site-urls.ts`, `src/routing/resolve-route.ts`
 - Test: `src/routing/site-urls.test.ts`, `src/routing/resolve-route.test.ts`
 - Create: `.env.development` (`NEXT_PUBLIC_ROOT_DOMAIN=localhost:3000`), `.env.example`
 - Modify: `.gitignore` (add `!.env.development`)
 
 **Interfaces (Produces):**
+
 ```ts
 export type Section = "home" | "projects" | "blog";
 export type RoutingConfig =
   | { mode: "host"; rootDomain: string; protocol: "http" | "https" }
   | { mode: "path"; origin: string };
-export function createRoutingConfig(env: { rootDomain?: string; vercelUrl?: string }): RoutingConfig;
+export function createRoutingConfig(env: {
+  rootDomain?: string;
+  vercelUrl?: string;
+}): RoutingConfig;
 export const routingConfig: RoutingConfig; // from process.env.NEXT_PUBLIC_ROOT_DOMAIN / NEXT_PUBLIC_VERCEL_URL
-export function sectionUrl(section: Section, path?: string, config?: RoutingConfig): string; // always absolute
-export function sectionPath(section: Section, path?: string, config?: RoutingConfig): string; // same-host path
-export function sectionHref(target: Section, current: Section, path?: string, config?: RoutingConfig): string;
+export function sectionUrl(
+  section: Section,
+  path?: string,
+  config?: RoutingConfig,
+): string; // always absolute
+export function sectionPath(
+  section: Section,
+  path?: string,
+  config?: RoutingConfig,
+): string; // same-host path
+export function sectionHref(
+  target: Section,
+  current: Section,
+  path?: string,
+  config?: RoutingConfig,
+): string;
 export function cookieDomain(config?: RoutingConfig): string | undefined;
 
 export type RouteDecision =
   | { action: "next" }
   | { action: "rewrite"; pathname: string }
   | { action: "redirect"; url: string };
-export function resolveRoute(input: { host: string; pathname: string }, config?: RoutingConfig): RouteDecision;
+export function resolveRoute(
+  input: { host: string; pathname: string },
+  config?: RoutingConfig,
+): RouteDecision;
 ```
 
 Rules: subdomain per section is `projects.` and `blogs.`; internal prefixes are `/projects` and
@@ -109,6 +130,7 @@ switch to `localhost`). Pass-through paths: `/_next/*`, `/static/*`, `/favicon.i
 ### Task 2: Design tokens, fonts, theme and site shell
 
 **Files:**
+
 - Modify: `src/app/globals.css` (tokens, base styles, `.prose`, focus, reduced motion),
   `src/app/layout.tsx` (fonts, inline theme script, skip link), `src/app/layout.test.ts`
 - Create: `content/site.ts`, `src/theme/theme-cookie.ts` (+test), `src/theme/theme-script.ts`
@@ -117,17 +139,24 @@ switch to `localhost`). Pass-through paths: `/_next/*`, `/static/*`, `/favicon.i
   `src/app/(home)/layout.tsx` (move `page.tsx` + test into `(home)`)
 
 **Interfaces (Produces):**
+
 ```ts
 // src/theme/theme-cookie.ts
 export type Theme = "light" | "dark";
 export const THEME_COOKIE = "theme";
 export function parseTheme(value: string | undefined): Theme | undefined;
 export function readThemeCookie(cookieHeader: string): Theme | undefined;
-export function serializeThemeCookie(theme: Theme, domain: string | undefined): string; // 1-year, path=/, SameSite=Lax
+export function serializeThemeCookie(
+  theme: Theme,
+  domain: string | undefined,
+): string; // 1-year, path=/, SameSite=Lax
 // src/theme/theme-script.ts
 export function buildThemeScript(): string; // IIFE reading document.cookie, sets data-theme if valid
 // src/site-shell/SiteShell.tsx
-export function SiteShell(props: { section: Section; children: React.ReactNode }): JSX.Element;
+export function SiteShell(props: {
+  section: Section;
+  children: React.ReactNode;
+}): JSX.Element;
 // content/site.ts
 export const site: SiteProfile; // name, shortName, status, location, headline {before, emphasis, after},
 // intro, email, resumePath, socials {github, linkedin}, experience[{period, role, company, impact, tags}],
@@ -146,6 +175,7 @@ export const site: SiteProfile; // name, shortName, status, location, headline {
 ### Task 3: Content pipeline (Velite + MDX)
 
 **Files:**
+
 - Create: `velite.config.ts`, `content/projects/{ledgerly,shipnote,queueless,dotfiles}.mdx`,
   `content/posts/{rest-to-trpc,debugging-ttfb,postgres-partial-indexes,three-years-full-stack,structured-clone}.mdx`,
   `content/pages/{now,uses}.mdx`, `src/content/MdxContent.tsx`, `src/content/mdx-components.tsx`,
@@ -156,18 +186,27 @@ export const site: SiteProfile; // name, shortName, status, location, headline {
   (`content` script = `velite build`; `typecheck` and `test` run it first)
 
 **Interfaces (Produces):**
+
 ```ts
 // Velite types from "#site/content": Project, Post, Page
 // project-queries.ts
 export function sortProjectsByDate(projects: Project[]): Project[]; // newest first
-export function featuredProjects(projects: Project[], limit?: number): Project[];
+export function featuredProjects(
+  projects: Project[],
+  limit?: number,
+): Project[];
 export function projectTypes(projects: Project[]): string[]; // unique, in first-seen order
 export function caseStudies(projects: Project[]): Project[];
-export function adjacentItems<T extends { slug: string }>(items: T[], slug: string): { previous?: T; next?: T };
+export function adjacentItems<T extends { slug: string }>(
+  items: T[],
+  slug: string,
+): { previous?: T; next?: T };
 export function projectLink(project: Project): string | undefined; // case study path, else liveUrl, else repoUrl
 // post-queries.ts
 export function sortPostsByDate(posts: Post[]): Post[];
-export function groupPostsByYear(posts: Post[]): { year: number; posts: Post[] }[]; // years desc
+export function groupPostsByYear(
+  posts: Post[],
+): { year: number; posts: Post[] }[]; // years desc
 export function postTags(posts: Post[]): string[];
 export function latestPosts(posts: Post[], limit?: number): Post[];
 // format-date.ts
@@ -192,6 +231,7 @@ summary, slug, toc: s.toc(), metadata: s.metadata(), content: s.mdx()`. MDX uses
 ### Task 4: Home page
 
 **Files:**
+
 - Modify: `src/app/(home)/page.tsx`, `src/app/(home)/page.test.tsx`
 - Create: `src/home/{StatusLine,Hero,ExperienceList,FeaturedProjects,LatestPosts,ContactBox}.tsx`,
   `src/ui/{ButtonLink,TagList,CopyButton,SectionHeading}.tsx`, `src/ui/copy-to-clipboard.ts` (+test),
@@ -209,6 +249,7 @@ the API is missing or rejects; never throws), `TagList({ tags })`, `ButtonLink({
 ### Task 5: Projects index and case study
 
 **Files:**
+
 - Create: `src/app/projects/{layout,page}.tsx`, `src/app/projects/[slug]/page.tsx`,
   `src/projects/{ProjectFilters,ProjectArchive,FactsGrid,ArchitectureDiagram,MetricCards,ScreenshotFrame}.tsx`,
   `src/ui/PrevNextLinks.tsx`, tests for filters, archive and page module.
@@ -221,6 +262,7 @@ the API is missing or rejects; never throws), `TagList({ tags })`, `ButtonLink({
 ### Task 6: Blog index, post page, /now and /uses
 
 **Files:**
+
 - Create: `src/app/blog/{layout,page}.tsx`, `src/app/blog/[slug]/page.tsx`,
   `src/app/(home)/now/page.tsx`, `src/app/(home)/uses/page.tsx`,
   `src/blog/{PostFilters,TableOfContents,CodeBlock,Callout,GiscusComments}.tsx`, tests.
@@ -233,6 +275,7 @@ the API is missing or rejects; never throws), `TagList({ tags })`, `ButtonLink({
 ### Task 7: Subdomain proxy + Playwright
 
 **Files:**
+
 - Create: `src/proxy.ts`, `playwright.config.ts`, `e2e/routing.spec.ts`, `e2e/theme.spec.ts`
 - Modify: `package.json` (`e2e` script), `.gitignore` (playwright output), `vitest.config.mts` (exclude `e2e/`)
 
@@ -244,6 +287,7 @@ the API is missing or rejects; never throws), `TagList({ tags })`, `ButtonLink({
 ### Task 8: SEO (metadata, sitemaps, robots, RSS, OG images)
 
 **Files:**
+
 - Create: `src/seo/{page-metadata,sitemap-entries,robots-text,rss-feed}.ts` (+tests),
   `src/app/sitemap.ts`, `src/app/projects/sitemap.ts`, `src/app/blog/sitemap.ts`,
   `src/app/robots.txt/route.ts`, `src/app/projects/robots.txt/route.ts`, `src/app/blog/robots.txt/route.ts`,
@@ -259,6 +303,7 @@ the API is missing or rejects; never throws), `TagList({ tags })`, `ButtonLink({
 ### Task 9: Polish (command palette, transitions, analytics, CI, docs)
 
 **Files:**
+
 - Create: `src/command-palette/{CommandPalette,command-items}.tsx` (+tests), `src/analytics/SiteAnalytics.tsx`,
   `e2e/links.spec.ts`
 - Modify: root layout (palette + analytics + `<ViewTransition>` around section content), CSS

@@ -44,8 +44,9 @@ next-env.d.ts
 .idea/
 .vscode/
 
-# example env files are safe to commit
+# example and development env files hold no secrets and are safe to commit
 !.env.example
+!.env.development
 
 # local-only Claude settings
 .claude/settings.local.json
