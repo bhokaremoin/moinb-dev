@@ -18,8 +18,11 @@ export function CopyButton({
   text,
   label,
   className = buttonClassName(),
+  ariaLabel,
 }: {
-  text: string;
+  ariaLabel?: string;
+  /** A function is read at click time, for text that lives in the DOM. */
+  text: string | (() => string);
   label: string;
   className?: string;
 }) {
@@ -34,12 +37,19 @@ export function CopyButton({
   }, [status]);
 
   async function copyText() {
-    const isCopied = await copyToClipboard(text);
+    const isCopied = await copyToClipboard(
+      typeof text === "function" ? text() : text,
+    );
     setStatus(isCopied ? "copied" : "failed");
   }
 
   return (
-    <button type="button" className={className} onClick={copyText}>
+    <button
+      type="button"
+      className={className}
+      aria-label={ariaLabel}
+      onClick={copyText}
+    >
       <span aria-live="polite">
         {status === "idle" ? label : STATUS_LABELS[status]}
       </span>

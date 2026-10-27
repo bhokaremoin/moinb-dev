@@ -156,3 +156,50 @@
     font-size: 0.88em;
   }
 }
+
+/* Code blocks from rehype-pretty-code. Shiki emits both themes as --shiki-light/--shiki-dark on
+   each token; the active one follows the same rules as the colour tokens above. */
+.code-block {
+  position: relative;
+  margin: 20px 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--code-bg);
+
+  figcaption {
+    border-bottom: 1px solid var(--line);
+    padding: 6px 76px 6px 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  pre {
+    margin: 0;
+    overflow-x: auto;
+    padding: 14px;
+    font: 13px/1.6 var(--font-mono);
+  }
+}
+
+.code-block-copy {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: var(--code-bg);
+}
+
+[data-rehype-pretty-code-figure] code span {
+  color: var(--shiki-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [data-rehype-pretty-code-figure] code span {
+    color: var(--shiki-dark);
+  }
+}
+
+:root[data-theme="dark"] [data-rehype-pretty-code-figure] code span {
+  color: var(--shiki-dark);
+}

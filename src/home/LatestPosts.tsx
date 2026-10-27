@@ -9,8 +9,10 @@ export function LatestPosts() {
   return (
     <PageSection id="latest-writing" title="Latest writing">
       <PostList
-        posts={latestPosts(posts)}
-        hrefFor={(slug) => sectionUrl("blog", `/${slug}`)}
+        posts={latestPosts(posts).map((post) => ({
+          ...post,
+          href: sectionUrl("blog", `/${post.slug}`),
+        }))}
       />
       <MoreLink href={sectionUrl("blog")}>
         All posts on blogs.moinb.dev →

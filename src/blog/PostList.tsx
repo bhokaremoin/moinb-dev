@@ -8,21 +8,16 @@ type ListedPost = {
   date: string;
   til: boolean;
   readingMinutes: number;
+  href: string;
 };
 
-export function PostList({
-  posts,
-  hrefFor,
-}: {
-  posts: ListedPost[];
-  hrefFor: (slug: string) => string;
-}) {
+export function PostList({ posts }: { posts: ListedPost[] }) {
   return (
     <ul className="m-0 list-none p-0">
       {posts.map((post) => (
         <li key={post.slug}>
           <a
-            href={hrefFor(post.slug)}
+            href={post.href}
             className="group border-line flex items-baseline gap-4 border-b py-3 no-underline"
           >
             <time
