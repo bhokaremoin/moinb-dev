@@ -1,3 +1,5 @@
+import { writeFile } from "node:fs/promises";
+
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import { defineCollection, defineConfig, s } from "velite";
@@ -87,6 +89,19 @@ export default defineConfig({
     clean: true,
   },
   collections: { projects, posts, pages },
+  // A tiny slug list for the proxy, so it can 404 unknown slugs without bundling all content.
+  complete: async ({ projects, posts }) => {
+    const publishedSlugs = {
+      projects: projects
+        .filter((project) => project.caseStudy)
+        .map((project) => project.slug),
+      blog: posts.map((post) => post.slug),
+    };
+    await writeFile(
+      ".velite/published-slugs.json",
+      JSON.stringify(publishedSlugs, null, 2),
+    );
+  },
   mdx: {
     rehypePlugins: [
       rehypeSlug,

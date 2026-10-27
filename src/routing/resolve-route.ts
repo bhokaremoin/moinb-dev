@@ -9,9 +9,12 @@ import {
 export type RouteDecision =
   | { action: "next" }
   | { action: "rewrite"; pathname: string }
-  | { action: "redirect"; url: string };
+  | { action: "redirect"; url: string }
+  | { action: "not-found" };
 
 type RoutedSection = keyof typeof SECTION_PREFIXES;
+
+export type PublishedSlugs = Record<RoutedSection, readonly string[]>;
 
 const ROUTED_SECTIONS = Object.keys(SECTION_PREFIXES) as RoutedSection[];
 
@@ -24,6 +27,17 @@ function isSharedPath(pathname: string): boolean {
     SHARED_PATHS.has(pathname) ||
     SHARED_PREFIXES.some((prefix) => pathname.startsWith(prefix))
   );
+}
+
+// A single path segment without a file extension, e.g. `/ledgerly`, is always a content slug.
+const SLUG_PATH = /^\/([^/.]+)$/;
+
+function isUnpublishedSlug(
+  pathname: string,
+  publishedSlugs: readonly string[],
+): boolean {
+  const slug = SLUG_PATH.exec(pathname)?.[1];
+  return slug !== undefined && !publishedSlugs.includes(slug);
 }
 
 function sectionForHost(
@@ -56,10 +70,15 @@ function sectionForInternalPath(
  * Maps a public request (host + path) onto the app's internal routes. Section hosts are rewritten
  * into their section; internal section paths on the root host redirect to their subdomain so each
  * page has exactly one public URL.
+ *
+ * With `publishedSlugs`, unknown slugs resolve to not-found here. The slug pages render their
+ * fallback through a streamed shell, which has already sent a 200 by the time the page itself
+ * can call notFound(); deciding in the proxy keeps the status a real 404.
  */
 export function resolveRoute(
   request: { host: string; pathname: string },
   config: RoutingConfig = routingConfig,
+  publishedSlugs?: PublishedSlugs,
 ): RouteDecision {
   if (config.mode === "path" || isSharedPath(request.pathname)) {
     return { action: "next" };
@@ -67,6 +86,12 @@ export function resolveRoute(
 
   const hostSection = sectionForHost(request.host, config.rootDomain);
   if (hostSection) {
+    if (
+      publishedSlugs &&
+      isUnpublishedSlug(request.pathname, publishedSlugs[hostSection])
+    ) {
+      return { action: "not-found" };
+    }
     const prefix = SECTION_PREFIXES[hostSection];
     const pathname =
       request.pathname === "/" ? prefix : `${prefix}${request.pathname}`;

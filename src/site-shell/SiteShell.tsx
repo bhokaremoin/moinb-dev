@@ -8,7 +8,7 @@ export async function SiteShell({
   section,
   children,
 }: {
-  section: Section;
+  section: Section | undefined;
   children: React.ReactNode;
 }) {
   const year = await currentYear();

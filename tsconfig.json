@@ -21,7 +21,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@content/*": ["./content/*"],
-      "#site/content": ["./.velite"]
+      "#site/content": ["./.velite"],
+      "#site/published-slugs": ["./.velite/published-slugs.json"]
     }
   },
   "include": [

@@ -10,6 +10,7 @@ import {
 
 const production = createRoutingConfig({ rootDomain: "moinb.dev" });
 const local = createRoutingConfig({ rootDomain: "localhost:3000" });
+const namedLocal = createRoutingConfig({ rootDomain: "moinb.localhost:3000" });
 const preview = createRoutingConfig({ vercelUrl: "preview.vercel.app" });
 const pathOnLocalhost = createRoutingConfig({});
 
@@ -26,6 +27,14 @@ describe("createRoutingConfig", () => {
     expect(local).toEqual({
       mode: "host",
       rootDomain: "localhost:3000",
+      protocol: "http",
+    });
+  });
+
+  it("uses http for a named root under .localhost", () => {
+    expect(namedLocal).toEqual({
+      mode: "host",
+      rootDomain: "moinb.localhost:3000",
       protocol: "http",
     });
   });
@@ -97,6 +106,12 @@ describe("sectionHref", () => {
     );
   });
 
+  it("returns an absolute url when the current section is unknown", () => {
+    expect(sectionHref("home", undefined, "/#about", production)).toBe(
+      "https://moinb.dev/#about",
+    );
+  });
+
   it("returns an absolute url when linking to another section", () => {
     expect(sectionHref("blog", "projects", "/x", production)).toBe(
       "https://blogs.moinb.dev/x",
@@ -109,7 +124,11 @@ describe("cookieDomain", () => {
     expect(cookieDomain(production)).toBe(".moinb.dev");
   });
 
-  it("leaves the domain unset for localhost and path mode", () => {
+  it("shares cookies under a named .localhost root, which browsers allow", () => {
+    expect(cookieDomain(namedLocal)).toBe(".moinb.localhost");
+  });
+
+  it("leaves the domain unset for bare localhost and path mode", () => {
     expect(cookieDomain(local)).toBeUndefined();
     expect(cookieDomain(preview)).toBeUndefined();
   });
