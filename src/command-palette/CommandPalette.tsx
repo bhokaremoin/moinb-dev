@@ -21,6 +21,8 @@ function matchesSearch(_value: string, search: string, keywords?: string[]) {
   return searchable.includes(search.trim().toLowerCase()) ? 1 : 0;
 }
 
+const STATUS_DURATION_MS = 2500;
+
 function isCommandMenuShortcut(event: KeyboardEvent): boolean {
   return (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
 }
@@ -33,7 +35,26 @@ export function CommandPalette({
   section: Section | undefined;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string>();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!statusMessage) {
+      return;
+    }
+    const timer = setTimeout(
+      () => setStatusMessage(undefined),
+      STATUS_DURATION_MS,
+    );
+    return () => clearTimeout(timer);
+  }, [statusMessage]);
+
+  async function copyEmail() {
+    const isCopied = await copyToClipboard(site.email);
+    setStatusMessage(
+      isCopied ? "Email copied" : `Couldn't copy. Email me at ${site.email}`,
+    );
+  }
 
   useEffect(() => {
     function toggleOnShortcut(event: KeyboardEvent) {
@@ -63,7 +84,7 @@ export function CommandPalette({
       return;
     }
     if (action.kind === "copy-email") {
-      void copyToClipboard(site.email);
+      void copyEmail();
       return;
     }
     // Other sections are other origins, so only same-section moves can be client-side.
@@ -77,45 +98,54 @@ export function CommandPalette({
   const groups = [...new Set(items.map((item) => item.group))];
 
   return (
-    <Command.Dialog
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      label="Command menu"
-      filter={matchesSearch}
-      overlayClassName="fixed inset-0 z-40 bg-foreground/30"
-      contentClassName="fixed top-[15vh] left-1/2 z-50 w-[min(520px,calc(100%-32px))] -translate-x-1/2 overflow-hidden rounded-xl border border-line bg-surface shadow-[0_20px_50px_rgba(0,0,0,0.25)]"
-    >
-      <Command.Input
-        placeholder="Search pages, posts, actions…"
-        className="border-line text-foreground w-full border-0 border-b bg-transparent px-4 py-3.5 text-base outline-none"
-      />
-      <Command.List className="max-h-80 overflow-auto p-1.5">
-        <Command.Empty className="text-muted px-3 py-2">
-          No matches
-        </Command.Empty>
-        {groups.map((group) => (
-          <Command.Group
-            key={group}
-            heading={group}
-            className="[&_[cmdk-group-heading]]:text-muted [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[0.7rem] [&_[cmdk-group-heading]]:tracking-[0.08em] [&_[cmdk-group-heading]]:uppercase"
-          >
-            {items
-              .filter((item) => item.group === group)
-              .map((item) => (
-                <Command.Item
-                  key={item.id}
-                  value={item.id}
-                  keywords={[item.label, item.hint]}
-                  onSelect={() => runCommand(item)}
-                  className="data-[selected=true]:bg-accent-soft data-[selected=true]:text-accent flex cursor-pointer justify-between gap-3 rounded-md px-3 py-2"
-                >
-                  {item.label}
-                  <small className="text-muted font-mono">{item.hint}</small>
-                </Command.Item>
-              ))}
-          </Command.Group>
-        ))}
-      </Command.List>
-    </Command.Dialog>
+    <>
+      <p
+        role="status"
+        aria-live="polite"
+        className="bg-foreground text-background fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg px-4 py-2 text-sm empty:hidden"
+      >
+        {statusMessage}
+      </p>
+      <Command.Dialog
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        label="Command menu"
+        filter={matchesSearch}
+        overlayClassName="fixed inset-0 z-40 bg-foreground/30"
+        contentClassName="fixed top-[15vh] left-1/2 z-50 w-[min(520px,calc(100%-32px))] -translate-x-1/2 overflow-hidden rounded-xl border border-line bg-surface shadow-[0_20px_50px_rgba(0,0,0,0.25)]"
+      >
+        <Command.Input
+          placeholder="Search pages, posts, actions…"
+          className="border-line text-foreground w-full border-0 border-b bg-transparent px-4 py-3.5 text-base outline-none"
+        />
+        <Command.List className="max-h-80 overflow-auto p-1.5">
+          <Command.Empty className="text-muted px-3 py-2">
+            No matches
+          </Command.Empty>
+          {groups.map((group) => (
+            <Command.Group
+              key={group}
+              heading={group}
+              className="[&_[cmdk-group-heading]]:text-muted [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[0.7rem] [&_[cmdk-group-heading]]:tracking-[0.08em] [&_[cmdk-group-heading]]:uppercase"
+            >
+              {items
+                .filter((item) => item.group === group)
+                .map((item) => (
+                  <Command.Item
+                    key={item.id}
+                    value={item.id}
+                    keywords={[item.label, item.hint]}
+                    onSelect={() => runCommand(item)}
+                    className="data-[selected=true]:bg-accent-soft data-[selected=true]:text-accent flex cursor-pointer justify-between gap-3 rounded-md px-3 py-2"
+                  >
+                    {item.label}
+                    <small className="text-muted font-mono">{item.hint}</small>
+                  </Command.Item>
+                ))}
+            </Command.Group>
+          ))}
+        </Command.List>
+      </Command.Dialog>
+    </>
   );
 }
