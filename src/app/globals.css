@@ -120,3 +120,39 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Long-form MDX content: case studies, posts and the /now and /uses pages. */
+.article-prose {
+  h2 {
+    margin: 44px 0 10px;
+    font-size: 1.4rem;
+  }
+
+  h3 {
+    margin: 28px 0 8px;
+    font-size: 1.15rem;
+  }
+
+  p,
+  li {
+    max-width: 65ch;
+  }
+
+  ul,
+  ol:not([aria-label]) {
+    padding-left: 20px;
+    list-style: revert;
+  }
+
+  a {
+    color: var(--accent);
+  }
+
+  :not(pre) > code {
+    border-radius: 4px;
+    background: var(--code-bg);
+    padding: 0.1em 0.35em;
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+  }
+}
