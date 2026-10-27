@@ -82,6 +82,7 @@ describe("CommandPalette", () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
     push.mockReset();
     assign.mockReset();
   });
@@ -132,6 +133,21 @@ describe("CommandPalette", () => {
 
     expect(assign).toHaveBeenCalledWith("https://projects.moinb.dev/ledgerly");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("keeps cross-section moves on the current host in path mode", async () => {
+    // Without a root domain (Vercel previews) every section lives under one host. routingConfig
+    // is read at import, so the palette is re-imported with the variable unset.
+    vi.stubEnv("NEXT_PUBLIC_ROOT_DOMAIN", "");
+    vi.resetModules();
+    const { CommandPalette: PathModePalette } =
+      await import("./CommandPalette");
+    render(<PathModePalette items={items} section="home" />);
+    await userEvent.keyboard("{Control>}k{/Control}");
+
+    await userEvent.click(screen.getByRole("option", { name: /Ledgerly/ }));
+
+    expect(assign).toHaveBeenCalledWith("/projects/ledgerly");
   });
 
   it("navigates within the current section client-side", async () => {
