@@ -31,7 +31,7 @@ export function featuredProjects<T extends ProjectSummary>(
   ).slice(0, limit);
 }
 
-export function projectTypes(projects: ProjectSummary[]): string[] {
+export function projectTypes(projects: { type: string }[]): string[] {
   return [...new Set(projects.map((project) => project.type))];
 }
 
