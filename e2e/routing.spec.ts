@@ -72,3 +72,9 @@ test("archive-only projects have no case study page", async ({ request }) => {
 
   expect(response.status()).toBe(404);
 });
+
+test("unknown files on a section host are a real 404", async ({ request }) => {
+  const response = await request.get(`${PROJECTS_URL}/apple-touch-icon.png`);
+
+  expect(response.status()).toBe(404);
+});

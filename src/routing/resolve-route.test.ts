@@ -62,6 +62,7 @@ describe("resolveRoute on a section host", () => {
       "/resume.pdf",
       "/_next/static/a.js",
       "/static/x.png",
+      "/_vercel/insights/script.js",
     ]) {
       expect(
         resolveRoute({ host: "projects.moinb.dev", pathname }, production),
@@ -150,14 +151,29 @@ describe("resolveRoute with the published slugs", () => {
     });
   });
 
-  it("leaves section files and the index to their own routes", () => {
+  it("leaves each section's index and own files to their routes", () => {
     for (const pathname of [
       "/",
       "/sitemap.xml",
+      "/robots.txt",
       "/rss.xml",
-      "/ledgerly/og.png",
+      "/rest-to-trpc/og.png",
     ]) {
       expect(resolve("blogs.moinb.dev", pathname).action).toBe("rewrite");
     }
+  });
+
+  it("answers unknown files on a section host with not-found", () => {
+    for (const pathname of ["/apple-touch-icon.png", "/feed.xml", "/og.png"]) {
+      expect(resolve("projects.moinb.dev", pathname)).toEqual({
+        action: "not-found",
+      });
+    }
+  });
+
+  it("only serves the rss feed on the blog host", () => {
+    expect(resolve("projects.moinb.dev", "/rss.xml")).toEqual({
+      action: "not-found",
+    });
   });
 });
