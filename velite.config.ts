@@ -109,7 +109,7 @@ export default defineConfig({
         rehypePrettyCode,
         {
           // Both themes are emitted as CSS variables; globals.css picks one per data-theme.
-          theme: { light: "github-light", dark: "github-dark-dimmed" },
+          theme: { light: "github-light-default", dark: "github-dark-default" },
           keepBackground: false,
         },
       ],

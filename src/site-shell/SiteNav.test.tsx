@@ -49,6 +49,14 @@ describe("SiteNav", () => {
     );
   });
 
+  it("names the command menu button without relying on its shortcut glyph", () => {
+    render(<SiteNav section="home" />);
+
+    expect(
+      screen.getByRole("button", { name: "Open command menu" }),
+    ).not.toHaveAttribute("aria-label");
+  });
+
   it("offers the command menu and the theme toggle", () => {
     render(<SiteNav section="home" />);
 

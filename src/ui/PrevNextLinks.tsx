@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type NeighbourLink = { label: string; title: string; href: string };
 
 const LINK_CLASS =
@@ -11,12 +13,12 @@ function Neighbour({
   align: "left" | "right";
 }) {
   return (
-    <a
+    <Link
       href={link.href}
       className={`${LINK_CLASS} ${align === "right" ? "text-right sm:col-start-2" : ""}`}
     >
       <small className="text-muted block">{link.label}</small> {link.title}
-    </a>
+    </Link>
   );
 }
 

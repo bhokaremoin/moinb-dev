@@ -33,7 +33,12 @@ export default function ProjectsPage() {
   return (
     <>
       <PageIntro eyebrow="Projects" title="Things I've built" intro={INTRO} />
-      <ProjectFilters projects={cards} />
+      <section aria-labelledby="case-studies-heading">
+        <h2 id="case-studies-heading" className="sr-only">
+          Case studies
+        </h2>
+        <ProjectFilters projects={cards} />
+      </section>
       <PageSection id="archive" title="Archive">
         <ProjectArchive projects={projects} />
       </PageSection>

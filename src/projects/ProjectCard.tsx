@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { TagList } from "@/ui/TagList";
 
 import { ProjectThumbnail } from "./ProjectThumbnail";
@@ -13,7 +15,7 @@ export function ProjectCard({
 }) {
   return (
     <article>
-      <a
+      <Link
         href={href}
         className="border-line bg-surface hover:border-accent grid gap-[18px] rounded-[10px] border p-4 no-underline transition-[border-color,transform] duration-200 hover:-translate-y-0.5 sm:grid-cols-[150px_1fr]"
       >
@@ -27,7 +29,7 @@ export function ProjectCard({
           </p>
           <TagList tags={project.stack} />
         </div>
-      </a>
+      </Link>
     </article>
   );
 }
