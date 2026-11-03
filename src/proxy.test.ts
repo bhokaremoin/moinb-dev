@@ -34,11 +34,12 @@ describe("proxy", () => {
     );
   });
 
-  it("rewrites an unpublished slug to the not-found page before rendering", () => {
+  it("rewrites an unpublished slug to a path no route serves, so it gets the real 404", () => {
+    // Not /_not-found: that is a prerendered page, and Vercel's CDN serves it with a 200.
     const response = proxy(requestFor("https://blogs.moinb.dev/no-such-post"));
 
     expect(response.headers.get("x-middleware-rewrite")).toBe(
-      "https://blogs.moinb.dev/_not-found",
+      "https://blogs.moinb.dev/_no-route",
     );
   });
 
