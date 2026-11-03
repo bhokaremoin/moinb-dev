@@ -27,7 +27,7 @@ https://claude.ai/artifact/Lx4txZYZjSSnisU2EE9Fez. Spec and plan: `docs/superpow
 - Tailwind CSS v4 (configured in CSS via `@theme` in `src/app/globals.css`; no `tailwind.config` file)
 - Vitest + React Testing Library + jsdom for unit/component tests; Playwright (Chromium) for e2e
 - ESLint (`eslint-config-next`) + Prettier (with `prettier-plugin-tailwindcss` for class sorting)
-- Node 24 (`.nvmrc`), npm
+- Node 24 (`.nvmrc`, and `engines` in `package.json`, which is what Vercel builds with), npm
 
 ## Commands
 

@@ -59,7 +59,9 @@ just don't share the links until all three certificates are valid.
    for the Production environment only.
 2. In **Settings → Domains**, add `moinb.dev`, `projects.moinb.dev` and `blogs.moinb.dev` to the
    project.
-3. At your DNS provider, point the apex at Vercel (`A 76.76.21.21`, or the value Vercel shows) and
-   add `CNAME projects` and `CNAME blogs` to `cname.vercel-dns.com`.
+3. At your DNS provider, add the records Vercel asks for, which `npx vercel domains verify <domain>`
+   prints for each domain: two `A` records for the apex (replacing any parking records) and a
+   `CNAME` each for `projects` and `blogs`. The values are specific to the project, so copy them
+   from Vercel rather than from older guides.
 4. Wait until Vercel shows a valid certificate for all three domains, then open each over HTTPS.
    Turn on Web Analytics in the Vercel dashboard.
