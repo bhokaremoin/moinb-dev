@@ -50,6 +50,12 @@ test("an unknown slug is a real 404, not a soft one", async ({ request }) => {
   expect(await response.text()).toContain("Page not found");
 });
 
+test("the 404 page's title names the site once", async ({ page }) => {
+  await page.goto(`${BLOG_URL}/missing-${Date.now()}`);
+
+  await expect(page).toHaveTitle("Page not found · moinb.dev");
+});
+
 test("an unknown page on the root host is a 404", async ({ request }) => {
   const response = await request.get(`${ROOT_URL}/missing-${Date.now()}`);
 
