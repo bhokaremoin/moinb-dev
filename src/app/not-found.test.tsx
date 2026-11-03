@@ -1,9 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { NotFoundContent } from "./not-found";
+import { metadata, NotFoundContent } from "./not-found";
 
 describe("not-found page", () => {
+  it("leaves the site name to the root layout's title template", () => {
+    expect(metadata.title).toBe("Page not found");
+  });
+
   it("says the page is missing and offers a way back to each section", () => {
     render(<NotFoundContent />);
 

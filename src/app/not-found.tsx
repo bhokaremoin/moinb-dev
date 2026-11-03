@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { sectionHref } from "@/routing/site-urls";
 import { SiteShell } from "@/site-shell/SiteShell";
 
-export const metadata: Metadata = { title: "Page not found · moinb.dev" };
+export const metadata: Metadata = { title: "Page not found" };
 
 // Unknown section slugs are rewritten here by the proxy, so links are absolute: the visitor
 // may be on any subdomain.
