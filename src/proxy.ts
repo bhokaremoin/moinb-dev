@@ -4,8 +4,10 @@ import publishedSlugs from "#site/published-slugs";
 import { resolveRoute } from "@/routing/resolve-route";
 import { routingConfig } from "@/routing/site-urls";
 
-// Rendered by app/not-found.tsx with a real 404 status, because no route matches it.
-const NOT_FOUND_PATH = "/_not-found";
+// A path no route can match (`_` folders are private in the App Router), so the host answers with
+// app/not-found.tsx and a real 404. Not `/_not-found`: that is a prerendered page, and Vercel's
+// CDN serves it with a 200.
+const NOT_FOUND_PATH = "/_no-route";
 
 export function proxy(request: NextRequest) {
   const host = request.headers.get("host") ?? request.nextUrl.host;

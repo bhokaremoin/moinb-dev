@@ -62,7 +62,9 @@ second job, on every PR and push to `main`.
 - Velite drops a file that fails schema validation and still exits 0 unless run with `--strict`;
   `content` and `next build` are strict, the dev watcher is not.
 - Unknown slugs on `[slug]` pages would stream a 200 before `notFound()` (PPR fallback shell), so
-  the proxy 404s them using `.velite/published-slugs.json`. On a section host, every single-segment
+  the proxy 404s them using `.velite/published-slugs.json`, by rewriting to a path no route
+  matches. Never rewrite to `/_not-found`: Vercel serves that prerendered page with a 200, while
+  `next start` (and so e2e) returns 404, so only production shows the bug. On a section host, every single-segment
   path must be a published slug, a section file (`SECTION_FILES`) or a shared file
   (`SHARED_PATHS`) in `src/routing/resolve-route.ts`. **A new file in `public/` or a new section
   route handler must be added there**, or subdomains will 404 it.
