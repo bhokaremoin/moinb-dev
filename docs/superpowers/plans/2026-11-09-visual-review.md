@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-11-09-visual-review-design.md`
 
+**Review copy:** https://claude.ai/artifact/A37MFwJxESV29uWcViQvLo
+
 ## Global Constraints
 
 - Sizes: phone 390×844, tablet 768×1024, laptop 1280×800, wide 1440×900.

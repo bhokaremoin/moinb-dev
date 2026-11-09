@@ -1,6 +1,6 @@
 # Visual review setup: design
 
-Date: 2026-11-09. Status: approved in chat, awaiting written-spec review.
+Date: 2026-11-09. Review copy: https://claude.ai/artifact/SbAvU6RLGjYB6L5joexAq4. Status: approved in chat, awaiting written-spec review.
 
 ## Why
 
