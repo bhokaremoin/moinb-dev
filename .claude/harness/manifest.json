@@ -1,12 +1,12 @@
 {
-  "version": "0.7.0",
-  "commit": "7a9734c",
+  "version": "0.8.0",
+  "commit": "da45ada",
   "harness_repo": "https://github.com/bhokaremoin/apps-harness.git",
-  "synced_at": "2026-11-04T23:09:22",
+  "synced_at": "2026-11-09T20:13:09",
   "files": {
     ".claude/harness/knowledge/code-standards.md": "ecedb343eb50ce37b6098feebcb8ded7355381fd9685198a13b197eaa6595d7e",
     ".claude/harness/knowledge/profile.md": "f8ea7e54f7ac28929d750a01d9d68e5f1dde61f1ae4fa4d3df2776e90cce9f9f",
-    ".claude/harness/knowledge/working-rules.md": "0a63642893538bffb381930486d1c542a9c6aaccfd4ecf06436b2f0f810bbaf5",
+    ".claude/harness/knowledge/working-rules.md": "743dbab457abc2a392fd1f48e92507c841657c045d5c08b4680c70ac3f8943e7",
     ".claude/harness/review/filter-rules.md": "116ae2a927a4d9145260a25927f101c758e53ca21ec0a64c6b14c0dfc9768aa8",
     ".claude/harness/review/focus-areas.md": "6c5a9810b963e0bd1ba9eb5344e3e52e7c1998699ce22b8afa3097acbba4b26e",
     ".claude/harness/review/pr_review.py": "e3586f1c302d60eb0f39ecc4e939c4a718bfd5cdbe2c2adb1aba7e544ea0f4e9",
