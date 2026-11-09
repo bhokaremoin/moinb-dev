@@ -9,6 +9,9 @@
   refactor, test, docs, chore, perf, build, ci. The body explains *why* when it isn't obvious.
   One logical change per commit. Branches: `type/short-description` (`feat/daily-revenue-report`).
 - PR descriptions say what changed, why, and how it was tested.
+- **Anything for me to review** (spec, plan, design, report): commit the `.md` in the repo as the
+  record, and also publish it as a claude.ai Artifact, open it, and link it in your reply; I review
+  in the Artifact. Republish to the same Artifact when the document changes.
 - Keep project-specific knowledge (commands, gotchas, decisions) in `CLAUDE.project.md`, not here.
 - Use `h-learn` without being asked when I correct you, state how I like something done, a fix
   takes more than one attempt, or a review finds a Critical or High issue.
